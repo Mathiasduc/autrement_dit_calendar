@@ -1,106 +1,47 @@
 {
-  "manifest_version": 2,
-
-  "name": "Getting started example",
-  "description": "This extension shows a Google Image search result for the current page",
-  "version": "1.0",
-
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
-  "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
-  ]
-}
-
-{
   // Required
   "manifest_version": 2,
   "name": "Autrement dit calendar",
-  "version": "0.1",
+  "version": "0.2",
 
   // Recommended
   "description": "Une extension pour aider a l'uniformisation des titres d'evenements Google calendar",
   "icons": {
-    "19": "icon/icon19.png",
-    "24": "icon/icon24.png",
-    "32": "icon/icon32.png",
-    "48": "icon/icon48.png",
-    "128": "icon/icon128.png" 
+    "19": "icon/logo19.png",
+    "24": "icon/logo24.png",
+    "32": "icon/logo32.png",
+    "48": "icon/logo48.png",
+    "128": "icon/logo128.png" 
   },
 
-  // Pick one (or none)
   "browser_action": {
-    "default_icon": {                    // optional
-        "16": "images/icon16.png",           // optional
-        "24": "images/icon24.png",           // optional
-        "32": "images/icon32.png"            // optional
-      },
-    "default_title": "Calendar Autrement dit",      // optional; shown in tooltip
-    "default_popup": "test.html"        // optional
-  },
+    "default_icon": {                    
+     "19": "icon/logo19.png",
+     "24": "icon/logo24.png",
+     "32": "icon/logo32.png",
+     "48": "icon/logo48.png"
+   },
+   "default_title": "Calendar Autrement dit",
+   "default_popup": "view.html"
+ },
 
   // Optional
-  "author": "Sammy Sanchez, Arsene Ntib, Mathias Ducancel",
-  //"automation": ...,
+  "author": "Sammy Sanchez, Arsene Ntibushitse, Mathias Ducancel",
   "background": {
     "scripts": ["eventPage.js"],
     "persistent": false
   },
-  //"background_page": ...,
-  
-  "chrome_url_overrides": {...},
-  "commands": {...},
-  "content_capabilities": ...,
-  "content_scripts": [{...}],
-  "content_security_policy": "policyString",
-  "converted_from_user_script": ...,
-  "current_locale": ...,
-  "devtools_page": "devtools.html",
-  "event_rules": [{...}],
-  "externally_connectable": {
-    "matches": ["*://*.example.com/*"]
-  },
-  "file_browser_handlers": [...],
-  "file_system_provider_capabilities": {
-    "configurable": true,
-    "multiple_mounts": true,
-    "source": "network"
-  },
-  "homepage_url": "http://path/to/homepage",
-  "import": [{"id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}],
-  "incognito": "spanning, split, or not_allowed",
-  "input_components": ...,
-  "key": "publicKey",
-  "minimum_chrome_version": "versionString",
-  "nacl_modules": [...],
-  "oauth2": ...,
-  "offline_enabled": true,
-  "omnibox": {
-    "keyword": "aString"
-  },
-  "optional_permissions": ["tabs"],
-  "options_page": "options.html",
-  "options_ui": {
-    "chrome_style": true,
-    "page": "options.html"
-  },
-  "permissions": ["tabs"],
-  "platforms": ...,
-  "plugins": [...],
-  "requirements": {...},
-  "sandbox": [...],
-  "short_name": "Short Name",
-  "signature": ...,
-  "spellcheck": ...,
-  "storage": {
-    "managed_schema": "schema.json"
-  },
-  "system_indicator": ...,
-  "tts_engine": {...},
-  "update_url": "http://path/to/updateInfo.xml",
-  "version_name": "aString",
-  "web_accessible_resources": [...]
+
+// "options_page": "options.html",
+//"options_ui": {
+// "chrome_style": true,
+//"page": "options.html"
+//},
+
+"permissions": [
+  "tabs",
+  "clipboardRead",
+  "clipboardWrite"
+]
+// "web_accessible_resources": [] //pourrait en avoir besoin
 }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Autrement dit</title>
+	<link rel="stylesheet" href="node_modules/semantic-ui-css/semantic.css">
+	<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+	<div id="global">
+		<div class="ui form">
+			<h4  id="form_title" class="ui dividing header">Composez le titre de l'evenement:</h4>
+			<div class="field">
+				<div id="first_row" class="three fields">
+					<div class="field">
+						<label for="type">Type de l'evenement</label>
+						<select name="type" class="ui fluid dropdown">
+							<option value="">Choisir t	ype</option>
+							<option value="PRO">PRO</option>
+							<option value="PERSO">PERSO</option>
+							<option value="PERM">PERM</option>
+							<option value="SENSIB">SENSIB</option>
+							<option value="PPS_1">PPS 1</option>
+							<option value="PPS_2">PPS 2</option>
+							<option value="PPS_3">PPS 3</option>
+						</select>
+					</div>
+					<div class="field">
+						<label for="name" >Nom</label>
+						<input type="text" id="name" name="name" placeholder="Nom du client">
+					</div>
+					<div class="field">
+						<label for="accounting_number">N° de devis/facture</label>
+						<input type="text" id="accounting_number" name="accounting_number" placeholder="N° de devis ou facture(optionel)">
+					</div>
+				</div>
+				<div id="second_row" class="three fields">
+					<div class="field">
+						<div class="ui checkbox">
+							<label for="canceled_after_48h">Annulé moins de 48h</label>
+							<input type="checkbox" id="canceled_after_48h" name="canceled_after_48h">
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui checkbox">
+							<label for="canceled_before_48h">Annulé avant 48h</label>
+							<input type="checkbox" id="canceled_before_48h"" name="canceled_before_48h">
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui slider checkbox">
+							<label for="to_bill">A facturer</label>
+							<input type="checkbox" id="to_bill"" name="to_bill">
+						</div>
+					</div>
+				</div>	
+				<div class="field">
+					<button id="button_submit" class="ui green submit button"><i class="edit icon"></i>Valider</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ui fluid action input">
+	<input type="text" placeholder="Votre titre apparetra ici">
+		<button class="ui teal right labeled icon button">
+			<i class="copy icon"></i>
+			Copier
+		</button>
+	</div>
+
+
+	<script src="node_modules/jquery/dist/jquery.js"></script>
+	<script src="node_modules/semantic-ui-css/semantic.js"></script>
+	<script src="background.js"></script>
+</body>
+</html>
