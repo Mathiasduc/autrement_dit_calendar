@@ -15,7 +15,7 @@
 					<div class="field">
 						<label for="type">Type de l'evenement</label>
 						<select name="type" class="ui fluid dropdown">
-							<option value="">Choisir t	ype</option>
+							<option value="">Choisir type</option>
 							<option value="PRO">PRO</option>
 							<option value="PERSO">PERSO</option>
 							<option value="PERM">PERM</option>
@@ -36,15 +36,15 @@
 				</div>
 				<div id="second_row" class="three fields">
 					<div class="field">
-						<div class="ui checkbox">
-							<label for="canceled_after_48h">Annulé moins de 48h</label>
-							<input type="checkbox" id="canceled_after_48h" name="canceled_after_48h">
+						<div class="ui checkbox" id="canceled_after_48h">
+							<label for="canceled_after_48h">Annulé apres moins de 48h</label>
+							<input type="checkbox" name="canceled_after_48h">
 						</div>
 					</div>
 					<div class="field">
-						<div class="ui checkbox">
+						<div id="canceled_before_48h" class="ui checkbox">
 							<label for="canceled_before_48h">Annulé avant 48h</label>
-							<input type="checkbox" id="canceled_before_48h"" name="canceled_before_48h">
+							<input type="checkbox"  name="canceled_before_48h">
 						</div>
 					</div>
 					<div class="field">
@@ -54,21 +54,19 @@
 						</div>
 					</div>
 				</div>	
-				<div class="field">
+				<div class="field button_field">
 					<button id="button_submit" class="ui green submit button"><i class="edit icon"></i>Valider</button>
 				</div>
 			</div>
 		</div>
+		<div class="ui fluid action input">
+			<input type="text" placeholder="Votre titre apparaitra ici">
+			<button class="ui teal right labeled icon button">
+				<i class="copy icon"></i>
+				Copier
+			</button>
+		</div>
 	</div>
-	<div class="ui fluid action input">
-	<input type="text" placeholder="Votre titre apparetra ici">
-		<button class="ui teal right labeled icon button">
-			<i class="copy icon"></i>
-			Copier
-		</button>
-	</div>
-
-
 	<script src="node_modules/jquery/dist/jquery.js"></script>
 	<script src="node_modules/semantic-ui-css/semantic.js"></script>
 	<script src="background.js"></script>
