@@ -9,3 +9,4 @@
 	}
 	app.init();
 }();
+console.log("dans eventpage");

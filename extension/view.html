@@ -34,6 +34,7 @@
 						<input type="text" id="accounting_number" name="accounting_number" placeholder="N° de devis ou facture(optionel)">
 					</div>
 				</div>
+
 				<div id="second_row" class="three fields">
 					<div class="field">
 						<div class="ui checkbox" id="canceled_after_48h">
@@ -54,14 +55,17 @@
 						</div>
 					</div>
 				</div>	
-				<div class="field button_field">
-					<button id="button_submit" class="ui green submit button"><i class="edit icon"></i>Valider</button>
+
+				<div id="third_row" class="field">
+					<label for="input_other">Autres infos</label>
+					<input id="input_other" type="text" name="input_other" placeholder="ex:'4eme etage'">
+					
 				</div>
 			</div>
 		</div>
-		<div id="input_result" class="ui fluid action input">
-			<input type="text" placeholder="Votre titre apparaitra ici">
-			<button class="ui teal right labeled icon button">
+		<div class="ui fluid action input">
+			<input type="text" id="input_result" placeholder="Votre titre apparaitra ici">
+			<button id="copy" data-copytarget="#input_result" class="ui teal right labeled icon button">
 				<i class="copy icon"></i>
 				Copier
 			</button>
