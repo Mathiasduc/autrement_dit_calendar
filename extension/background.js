@@ -1,6 +1,7 @@
 "use strict";
 var app = {
 	formSelector: $(".ui.form"),
+	input_result: $("#input_result input"),
 
 	init: function(){
 		this.checkboxes();
@@ -11,7 +12,7 @@ var app = {
 	},
 	listeners: function(){
 		var me = this;
-		$("#button_submit").on("click", me.formValidation.bind(me));
+		me.formSelector.on("on change", me.displayResult.bind(me));
 	},
 
 	formSettings:function(){
@@ -29,24 +30,42 @@ var app = {
 		}
 	},
 
-	formStringify: function(){
+	outputFormatting: function(){
 		var values = this.form_values();
+		var stringOutput = "";
 		console.log(values);
-		/*if(values){
-			switch(values){
-			
+		if(!values){
+			return(values);
+		}
+		else{
+			if(values.type){
+				stringOutput += "[T:"+ values.type + "]";	
 			}
-			
-		}else{
-			return(false);
-		}*/
+			if(values.name){
+				stringOutput += "[N:" + values.name + "]";		
+			}
+			if(values.accounting_number){
+				stringOutput += "[C:" + values.accounting_number + "]";
+			}
+			if(values.canceled_after_48h){
+				stringOutput += "[A:" + "Annulé moins de 48h" + "]";
+			}
+			if(values.canceled_before_48h){
+				stringOutput += "[A:" + "Annulé plus de 48h" + "]";
+			}
+			if(values.to_bill){
+				stringOutput += "[F:" + "A facturer" + "]";
+			}
+			console.log(stringOutput);
+			return(stringOutput);
+		}
 	},
 	
-	formValidation:function(){
-		var stringValues = this.formStringify();
-		if(stringValues){
-			
-		}
+	displayResult:function(){
+		console.log(this.input_result)
+		this.input_result.val("test");
+		var result = this.outputFormatting();
+		this.input_result.val(result);
 	},
 
 	checkboxes:function(){
