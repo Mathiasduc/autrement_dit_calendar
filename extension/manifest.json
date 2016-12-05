@@ -24,11 +24,11 @@
  },
 
  "content_scripts": [
-    {
-      "matches": [  "https://calendar.google.com/*"],
-      "js": ["node_modules/jquery/dist/jquery.js", "contentScript.js"]
-    }
-  ],
+  {
+    "matches": [  "https://calendar.google.com/*"],
+    "js": ["node_modules/jquery/dist/jquery.js", "contentScript.js"]
+  }
+],
 
  "author": "Sammy Sanchez, Arsene Ntibushitse, Mathias Ducancel",
  "background": {
@@ -37,10 +37,10 @@
 },
 
 //"options_page": "options.html",
-//"options_ui": {
- // "chrome_style": true,
- // "page": "options.html"
-//},
+"options_ui": {
+ "chrome_style": true,
+ "page": "options.html"
+},
 
 "permissions": [
   "https://calendar.google.com/*",

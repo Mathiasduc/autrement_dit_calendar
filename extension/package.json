@@ -1,16 +1,25 @@
 {
-  "name": "extension",
+  "name": "client_extension",
   "version": "1.0.0",
-  "description": "",
+  "description": "a chrome extension for google calendar",
   "main": "backgroung.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "mathias ducancel",
   "license": "ISC",
   "dependencies": {
     "jquery": "^3.1.1",
     "semantic-ui-css": "^2.2.4"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Mathiasduc/autrement_dit_calendar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mathiasduc/autrement_dit_calendar/issues"
+  },
+  "homepage": "https://github.com/Mathiasduc/autrement_dit_calendar#readme"
 }
