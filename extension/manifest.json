@@ -23,24 +23,30 @@
    "default_popup": "view.html"
  },
 
-  "author": "Sammy Sanchez, Arsene Ntibushitse, Mathias Ducancel",
-  "background": {
-    "scripts": ["eventPage.js"],
-    "persistent": false
-  },
+ "content_scripts": [
+  {
+    "matches": ["https://calendar.google.com/*"],
+    "js": ["contentScript.js"]
+  }
+],
 
-  "options_page": "options.html",
-  "options_ui": {
-   "chrome_style": true,
-   "page": "options.html"
- },
+ "author": "Sammy Sanchez, Arsene Ntibushitse, Mathias Ducancel",
 
- "permissions": [
+ "background": {
+  "scripts": ["eventPage.js"],
+  "persistent": false
+},
+
+"options_page": "options.html",
+"options_ui": {
+ "chrome_style": true,
+ "page": "options.html"
+},
+
+"permissions": [
   "tabs",
   "clipboardRead",
   "clipboardWrite",
   "storage"
-
 ]
-// "web_accessible_resources": [] //pourrait en avoir besoin
 }

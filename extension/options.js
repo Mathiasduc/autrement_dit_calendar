@@ -26,10 +26,10 @@ var app = {
 		var newType = document.getElementById('type_add').value;
 		if(!newType){ 
 			/*verfie que la valeur n'est pas nulle*/
-			document.getElementById('type_add').value("Veuillez entrer une valeur.");
+			document.getElementById('type_add').setValue("Veuillez entrer une valeur.");
 			return(0);
 		}
-		newType.trim().replace(/ /g,"_"); /*on enleve les espaces de debut et de fin(trim) et on remplace les espaces restants avec des underscores (REGEX)*/
+		newType.replace(/ /g,"_"); /*on enleve les espaces de debut et de fin(trim) et on remplace les espaces restants avec des underscores (REGEX)*/
 		console.log(newType);
 		return(true);
 		chrome.storage.sync.get(function(result){
