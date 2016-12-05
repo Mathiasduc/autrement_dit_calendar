@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>options</title>
+	<link rel="stylesheet" href="options.css">
+</head>
+<body>
+	<form class="first_form">
+			<label for="type">	
+				Type d'intervention:
+			</label>
+		<div>
+			<select name="type" id="type">
+				<option value="">Sélectionner un type</option>
+			</select>
+			<button type="button" id="delete_option">Supprimer ce type</button>
+		</div>
+	</form>
+	<form>
+		<label for="type_add">Ajouter un nouveau type:</label>
+		<div>
+			<input id="type_add" type="text">
+			<button id="button_add" type="button">Ajouter</button>	
+		</div>
+		<div id="status"></div>
+	</form>
+	<script src="options.js"></script>
+</body>
+</html>

@@ -3,14 +3,30 @@ var app = {
 	formSelector: $(".ui.form"),
 	input_result: $("#input_result"),
 	input_form: $(".ui.form input"),
+	currentID: "igakpddjnpigbmfjahgionnlfbplgmpf",
 /*	forbiden_words: ["PRO","PERSO","PERM","SENSIB","PPS","PPS_1","PPS_2","PPS_3",
 	"Annulé moins de 48h", "Annulé plus de 48h","A facturer"],*/ //on verra ca plus tard
 
 	init: function(){
+		this.populateSelect();
 		this.checkboxes();
 		this.formSettings();
 		$(".dropdown").dropdown();
 		this.listeners();
+		this.testMessagePassing();
+	},
+
+	populateSelect: function(){
+		var select = document.getElementById('type');
+		select.options.length = 1;
+		chrome.storage.sync.get(function(result){
+			console.log(result);
+			var typeLength = result.type.length;
+			for (var i = 0; i < typeLength; i++) {
+				var currentOption = result.type[i];
+				select.options[select.options.length] = new Option(currentOption, currentOption );
+			}	
+		});
 	},
 	
 	listeners: function(){
@@ -18,6 +34,16 @@ var app = {
 		me.formSelector.on("on change", me.displayResult.bind(me));
 		me.input_form.on("keyup", me.displayResult.bind(me));
 		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
+		//test
+		chrome.runtime.onMessage.addListener(
+			function(request, sender, sendResponse) {
+				console.log(sender.tab ?
+					"from a content script:" + sender.tab.url :
+					"from the extension");
+				if (request.greeting == "hello")
+					sendResponse({farewell: "goodbye from view"});
+			})
+		//test
 	},
 
 	formSettings:function(){
@@ -44,25 +70,23 @@ var app = {
 		}
 		else{
 			if(values.type){
-				stringOutput += "[T:"+ values.type + "]";	
-			}
-			if(values.name){
-				stringOutput += "[N:" + values.name + "]";		
+				stringOutput += "[T:"+ values.type + "] "	
+				+ values.name;
 			}
 			if(values.accounting_number){
-				stringOutput += "[C:" + values.accounting_number + "]";
+				stringOutput += " [C:" + values.accounting_number + "]";
 			}
 			if(values.canceled_after_48h){
-				stringOutput += "[A:" + "Annulé moins de 48h" + "]";
+				stringOutput += " [A:" + "Annulé moins de 48h" + "]";
 			}
 			if(values.canceled_before_48h){
-				stringOutput += "[A:" + "Annulé plus de 48h" + "]";
+				stringOutput += " [A:" + "Annulé plus de 48h" + "]";
 			}
 			if(values.to_bill){
-				stringOutput += "[F:" + "A facturer" + "]";
+				stringOutput += " [F:" + "A facturer" + "]";
 			}
 			if(values.input_other){
-				stringOutput += "[I:" + values.input_other + "]";
+				stringOutput += " [I:" + values.input_other + "]";
 			}	
 			return(stringOutput);
 		}
@@ -83,7 +107,7 @@ var app = {
 		try {								/*on delimite une zone a tester*/
 			document.execCommand('copy'); 	/*copie la selection dans le clipboard*/
 			elementToCopy.blur(); 			/*fait perde le focus sur l input(et donc deselectionne)*/
-			this.animationFeedbackCopy();
+			this.animationFeedbackCopy();	/*animation qu il faudrait faire*/
 		}
 		catch (err) {
 			console.log('Erreur: ',err); 	/*si erreur, on la console log*/
@@ -96,12 +120,12 @@ var app = {
 		/*Ces deux fonctions permetent de s'assurer que une seul checkbox peut etre check.
 		Ces deux fonctions tiennent compte du niveau d'absatraction que semantic implemente.
 		On remarque que on cible la div de la checkbox et pas la checkbox elle meme.
-		Ces deux "event" sont, si j'ai bien compris, des raccourcis pour des listeners.*/
+		Ces deux fonctions sont, si j'ai bien compris, des raccourcis pour creer des listeners(event handlers).*/
 
 		$('#canceled_after_48h').checkbox('attach events', '#canceled_before_48h', 'uncheck');
 		$('#canceled_before_48h').checkbox('attach events', '#canceled_after_48h', 'uncheck');
 
-		/*L'on pourrais aussi utiliser cette fonction listener pour chaqu'une des deux checkbox:
+		/*L'on pourrais aussi utiliser cette fonction(en double) pour remplacer les fonction lignes 113 et 114
 	
 		var canceled_after_48h = $('#canceled_after_48h');
 		 canceled_after_48h.on('change',function(){
@@ -114,6 +138,15 @@ var app = {
 	animationFeedbackCopy:function(){
 		/*Implementer une animation qui confirmera l'user que le contenu a ete copier dans le clipboard*/
 	},
+
+	testMessagePassing:function(){
+		/*on test le passsage de message entre popup, event page et content script */
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+				console.log(response.farewell);
+			});
+		});
+	}
 };
 $(document).ready(function(){
 	app.init();

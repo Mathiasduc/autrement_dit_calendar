@@ -1,0 +1,14 @@
+body{
+	font-size: 16px;
+	max-width: 48em;
+	min-width: 20em; 
+}
+
+.first_form{
+	margin-bottom: 2.5em;
+}
+
+#delete_option{	
+	text-shadow: none;
+	color:black;
+}
