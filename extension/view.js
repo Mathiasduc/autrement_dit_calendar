@@ -20,7 +20,6 @@ var app = {
 		var select = document.getElementById('type');
 		select.options.length = 1;
 		chrome.storage.sync.get(function(result){
-			console.log(result);
 			var typeLength = result.type.length;
 			for (var i = 0; i < typeLength; i++) {
 				var currentOption = result.type[i];

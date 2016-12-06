@@ -1,59 +1,98 @@
 var app = {
+	select: document.getElementById('type'),
+
 	init: function(){
-		console.log("dans init options");
 		this.populateSelect();
 		this.listeners();
 	},
 
-	populateSelect: function(){
-		var select = document.getElementById('type');
-		select.options.length = 1;
-		chrome.storage.sync.get(function(result){
-			var typeLength = result.type.length;
-			for (var i = 0; i < typeLength; i++) {
-				var currentOption = result.type[i];
-				select.options[select.options.length] = new Option(currentOption, currentOption );
+	populateSelect: function(options){
+		var me = this;
+		me.select.options.length = 1; /* on reinitialise le nombre d'option du select a 1(default option)*/
+		function populate(){
+			var optionsLength = options.length;
+			for (var i = 0; i < optionsLength; i++) {
+				var currentOption = options[i];
+				me.select.options[me.select.options.length] = new Option(currentOption, currentOption); /*on affecte tout les valeur recuperee en memoire a des nouvelles options pour le select*/
 			}	
-		});
+		}
+		if(!options){
+			console.log("populate options undefined")
+			chrome.storage.sync.get(function(result){
+				options = result.type;
+				populate();
+				/*object global chrome auquel on a acces a .storage grace a la permission dans le manifest .sync pour stockage synchronisé (voir doc)*/
+			});
+		}else{
+			populate();
+		}
 	},
 
 	listeners: function(){
 		var me = this;
-		document.getElementById('button_add').addEventListener("click", me.saveNewOptions.bind(me),true);
+		document.getElementsByTagName('form')[0].addEventListener('submit', me.deleteOptions.bind(me),true);
+		document.getElementsByTagName('form')[1].addEventListener('submit', me.saveNewOptions.bind(me),true);
 	},
 
-	saveNewOptions: function(){
+	saveNewOptions: function(event){
+		event.preventDefault();
+		var me = this;
 		var newType = document.getElementById('type_add').value;
 		if(!newType){ 
 			/*verfie que la valeur n'est pas nulle*/
-			document.getElementById('type_add').setValue("Veuillez entrer une valeur.");
-			return(0);
+			me.animationFeedback('empty');
+			return(1);
 		}
-		newType.replace(/ /g,"_"); /*on enleve les espaces de debut et de fin(trim) et on remplace les espaces restants avec des underscores (REGEX)*/
-		console.log(newType);
-		return(true);
+		newType = newType.trim().replace(/ /g,"_");	/*on enleve les espaces de debut et de fin(trim) et on remplace les espaces restants avec des underscores (REGEX)*/
 		chrome.storage.sync.get(function(result){
-			console.log(result);
 			result.type.push(newType);
 			chrome.storage.sync.set({type: result.type}, function() {
-				this.animationFeedback("add");
-				chrome.storage.sync.get(function(items){
-					console.log(items);
-				});
+				me.animationFeedback("add");
+				me.populateSelect(result.type);
 			});
 		});
 	},
 
-	animationFeedback: function(addOrDelete){ 
+	deleteOptions:function(event){
+		event.preventDefault();
+		var me = this;
+		var valueToDelete = me.select.options[me.select.selectedIndex].value; /*on recup la valeur de l'element selectionne dans le select*/
+		console.log(valueToDelete);
+		chrome.storage.sync.get(function(result){
+			var indexToDelete = result.type.indexOf(valueToDelete);
+			result.type.splice(indexToDelete, 1);
+			chrome.storage.sync.set({type: result.type}, function() {
+				me.animationFeedback("delete");
+				me.populateSelect(result.type);
+			});
+		});
+	},
+
+	animationFeedback: function(typeOfMessage){ 
 		/*fonction pour graphiquement valider l'action de l'user*/
-		if (addOrDelete === "add"){
-			/* on teste l'argument passé afin de savoir quelle action ete faite*/
-			var status = document.getElementById('status');
-			status.textContent = 'Nouveau type sauvegardé.';
+		var status;
+		var timerAnimation;
+		function messageTimer(message){
+			status = document.getElementById('status');
+			status.textContent = message;
 			/*on affiche un message pendant 1 sec puis on le supprime*/
-			setTimeout(function() {
+			timerAnimation = setTimeout(function() {
 				status.textContent = '';
-			}, 1000);
+			}, 2000);
+		}
+		messageTimer();
+		clearTimeout(timerAnimation); /*on s'assure qu'il ny ais pas d'animation en cours*/
+		status.textContent = '';
+
+		if (typeOfMessage === "add"){
+			/* on teste l'argument passé afin de savoir quelle action ete faite*/
+			messageTimer('Nouveau type sauvegardé.');
+		}else if (typeOfMessage === "empty"){
+			messageTimer("Veuillez entrer une valeur.");	
+		}else if (typeOfMessage === 'delete'){
+			messageTimer("Ce type a été supprimé");
+		}else if (typeOfMessage === "none"){
+			messageTimer("Veuillez choisir un type.");	
 		}
 	}
 }
