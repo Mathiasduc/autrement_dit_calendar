@@ -3,7 +3,6 @@ var app = {
 	formSelector: $(".ui.form"),
 	input_result: $("#input_result"),
 	input_form: $(".ui.form input"),
-	currentID: "igakpddjnpigbmfjahgionnlfbplgmpf",
 /*	forbiden_words: ["PRO","PERSO","PERM","SENSIB","PPS","PPS_1","PPS_2","PPS_3",
 	"Annulé moins de 48h", "Annulé plus de 48h","A facturer"],*/ //on verra ca plus tard
 
@@ -41,12 +40,16 @@ var app = {
 					"from the extension");
 				if (request.greeting == "hello")
 					sendResponse({farewell: "goodbye from view"});
-			})
+			});
 		//test
 	},
 
 	formSettings:function(){
-		this.formSelector.form();
+		this.formSelector.form({
+			fields: {
+				name: 'empty',
+			}
+		});
 		//il faut rajouter les regles semantic
 	},
 
