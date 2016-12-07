@@ -1,8 +1,6 @@
 var app = {
 	init: function(){
-		console.log("dans init");
 		/*test d envoi et de reception de message entre popup et view */
-
 		chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			console.log(sender.tab ?
 				"from a content script:" + sender.tab.url :

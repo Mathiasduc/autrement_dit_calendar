@@ -9,35 +9,47 @@
 <body>
 	<div id="global">
 		<div class="ui form">
-			<h4  id="form_title" class="ui dividing header">Composez le titre de l'evenement:</h4>
+			<div id="form_title" class="ui dividing header">
+				<h4 >Composez le titre de l'événement:</h4>
+				<h5><a>Paramètres</a></h5>
+			</div>
 			<div class="field">
-				<div id="first_row" class="three fields">
+				<div id="first_row" class="two fields">
 					<div class="field">
-						<label for="type">Type de l'evenement</label>
+						<label for="type">Type de l'événement</label>
 						<select id="type" name="type" class="ui fluid dropdown">
 							<option value="">Choisir type</option>
 						</select>
 					</div>
 					<div class="field">
 						<label for="name" >Nom</label>
-						<input type="text" id="name" name="name" placeholder="Nom du client">
-					</div>
-					<div class="field">
-						<label for="accounting_number">N° de devis/facture</label>
-						<input type="text" id="accounting_number" name="accounting_number" placeholder="N° de devis ou facture(optionel)">
+						<input type="text" id="name" name="name" placeholder="Intitulé du client">
 					</div>
 				</div>
-
-				<div id="second_row" class="three fields">
+				<div id="second_row" class="two fields">
+					<div class="field">
+						<label for="estimate_number">N° de devis</label>
+						<input type="text" id="estimate_number" name="estimate_number" placeholder="ex: 13053TZ">
+					</div>
+					<div class="field">
+						<label for="bill_number">N° de facture</label>
+						<input type="text" id="bill_number" name="bill_number" placeholder="ex: 328HV">
+					</div>
+				</div>
+				<div id="third_row" class="field">
+					<label for="input_other">Autres infos</label>
+					<input id="input_other" type="text" name="input_other" placeholder="ex:'4eme etage'">
+				</div>
+				<div id="fourth_row" class="button_field">
 					<div class="field">
 						<div class="ui checkbox" id="canceled_after_48h">
-							<label for="canceled_after_48h">Annulé apres moins de 48h</label>
+							<label for="canceled_after_48h">Annulé -48h</label>
 							<input type="checkbox" name="canceled_after_48h">
 						</div>
 					</div>
 					<div class="field">
 						<div id="canceled_before_48h" class="ui checkbox">
-							<label for="canceled_before_48h">Annulé avant 48h</label>
+							<label for="canceled_before_48h">Annulé +48h</label>
 							<input type="checkbox"  name="canceled_before_48h">
 						</div>
 					</div>
@@ -48,11 +60,6 @@
 						</div>
 					</div>
 				</div>	
-
-				<div id="third_row" class="field">
-					<label for="input_other">Autres infos</label>
-					<input id="input_other" type="text" name="input_other" placeholder="ex:'4eme etage'">
-				</div>
 				<div class="ui error message"></div>
 			</div>
 		</div>

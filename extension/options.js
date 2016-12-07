@@ -70,17 +70,15 @@ var app = {
 
 	animationFeedback: function(typeOfMessage){ 
 		/*fonction pour graphiquement valider l'action de l'user*/
-		var status;
+		var status = document.getElementById('status');
 		var timerAnimation;
 		function messageTimer(message){
-			status = document.getElementById('status');
 			status.textContent = message;
-			/*on affiche un message pendant 1 sec puis on le supprime*/
+			/*on affiche un message pendant 3 sec puis on le supprime*/
 			timerAnimation = setTimeout(function() {
 				status.textContent = '';
-			}, 2000);
+			}, 3000);
 		}
-		messageTimer();
 		clearTimeout(timerAnimation); /*on s'assure qu'il ny ais pas d'animation en cours*/
 		status.textContent = '';
 

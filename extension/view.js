@@ -4,21 +4,29 @@ var app = {
 	input_result: $("#input_result"),
 	input_form: $(".ui.form input"),
 /*	forbiden_words: ["PRO","PERSO","PERM","SENSIB","PPS","PPS_1","PPS_2","PPS_3",
-	"Annulé moins de 48h", "Annulé plus de 48h","A facturer"],*/ //on verra ca plus tard
+	"Annulé moins de 48h", "Annulé plus de 48h","A facturer"], on verra ca plus tard */
 
 	init: function(){
+		this.formSettings();
+		this.populateForm();
 		this.populateSelect();
 		this.checkboxes();
-		this.formSettings();
 		$(".dropdown").dropdown();
 		this.listeners();
-		this.testMessagePassing();
+	},
+
+	populateForm: function(){
+		var me = this;
+		chrome.storage.local.get(function(result){
+			console.log(result);
+			me.formSelector.form('set values', result.savedValues);
+		});
 	},
 
 	populateSelect: function(){
 		var select = document.getElementById('type');
 		select.options.length = 1;
-		chrome.storage.sync.get(function(result){
+			chrome.storage.sync.get(function(result){
 			var typeLength = result.type.length;
 			for (var i = 0; i < typeLength; i++) {
 				var currentOption = result.type[i];
@@ -32,57 +40,56 @@ var app = {
 		me.formSelector.on("on change", me.displayResult.bind(me));
 		me.input_form.on("keyup", me.displayResult.bind(me));
 		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
-		//test
-		chrome.runtime.onMessage.addListener(
-			function(request, sender, sendResponse) {
-				console.log(sender.tab ?
-					"from a content script:" + sender.tab.url :
-					"from the extension");
-				if (request.greeting == "hello")
-					sendResponse({farewell: "goodbye from view"});
-			});
-		//test
+		chrome.runtime.sendMessage({test: "message?"});
+		addEventListener("onunload", function() {
+			console.log("onunload");
+			chrome.runtime.sendMessage({'onunload': "onunload"});
+		}, true);
+		addEventListener("unload", function() {
+			var savedValues = me.form_values();
+			console.log("unloading");
+			chrome.runtime.sendMessage({'savedValues': savedValues});
+			chrome.storage.local.set({'savedValues': savedValues})
+		}, true);
 	},
 
 	formSettings:function(){
-		this.formSelector.form({
-			fields: {
-				name: 'empty',
-			}
-		});
-		//il faut rajouter les regles semantic
+		this.formSelector.form();
+		/*A FAIRE regles de "danger" pour les mots interdits*/
 	},
 
 	form_values:function(){
-		var form_is_valid = this.formSelector.form('is valid');
-		if(form_is_valid){
-			var values = this.formSelector.form('get values');
-			return(values);
-		}else{
-			return(false);
-		}
+		/* A FAIRE tester si "danger" et display "danger"
+		var form_is_valid = this.formSelector.form('is valid'); */
+		var values = this.formSelector.form('get values');
+		return(values)
 	},
 
 	outputFormatting: function(){
 		var values = this.form_values();
+		chrome.storage.local.set({'savedValues': values})
 		var stringOutput = "";
-		console.log(values);
 		if(!values){
 			return(values);
 		}
 		else{
 			if(values.type){
-				stringOutput += "[T:"+ values.type + "] "	
-				+ values.name;
+				stringOutput += "[T:"+ values.type + "]";
 			}
-			if(values.accounting_number){
-				stringOutput += " [C:" + values.accounting_number + "]";
+			if(values.name){
+				stringOutput += " " + values.name;
+			}
+			if(values.estimate_number){
+				stringOutput += " [D:" + values.estimate_number + "]";
+			}
+			if(values.bill_number){
+				stringOutput += " [F:" + values.bill_number + "]";
 			}
 			if(values.canceled_after_48h){
-				stringOutput += " [A:" + "Annulé moins de 48h" + "]";
+				stringOutput += " [A:" + "Annulé -48h" + "]";
 			}
 			if(values.canceled_before_48h){
-				stringOutput += " [A:" + "Annulé plus de 48h" + "]";
+				stringOutput += " [A:" + "Annulé +48h" + "]";
 			}
 			if(values.to_bill){
 				stringOutput += " [F:" + "A facturer" + "]";
@@ -95,7 +102,6 @@ var app = {
 	},
 	
 	displayResult:function(){
-		console.log(this.input_result)
 		this.input_result.val("test");
 		var result = this.outputFormatting();
 		this.input_result.val(result);
@@ -104,7 +110,6 @@ var app = {
 	copyToClipboard: function(event){
 		var idOfElementToCopy = event.target.dataset.copytarget;	  /*recupere l'id(de l'elem qu'on veut cibler) stocké dans le data-copytarget*/
 		var elementToCopy = document.querySelector(idOfElementToCopy);/*cible l'element dont on viens de recup l'Id*/
-		console.log(elementToCopy);
 		elementToCopy.select(); 			/*selectionne le contenu de l'input*/ 
 		try {								/*on delimite une zone a tester*/
 			document.execCommand('copy'); 	/*copie la selection dans le clipboard*/
@@ -138,17 +143,19 @@ var app = {
 	},
 
 	animationFeedbackCopy:function(){
-		/*Implementer une animation qui confirmera l'user que le contenu a ete copier dans le clipboard*/
-	},
+		var button = $('.button');
+		var iconButton = $('.button i');
 
-	testMessagePassing:function(){
-		/*on test le passsage de message entre popup, event page et content script */
-		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
-				console.log(response.farewell);
-			});
-		});
-	}
+		function toggleClasses(){
+			button.toggleClass('teal green');
+			iconButton.toggleClass('copy save');
+		}
+		toggleClasses();
+		setTimeout(function() {
+			toggleClasses();
+		}, 300);
+		/*A FAIRE ameliorer l animation (text apparait quelques secondes)*/
+	},
 };
 $(document).ready(function(){
 	app.init();
