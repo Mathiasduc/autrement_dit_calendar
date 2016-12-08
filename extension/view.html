@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Autrement dit</title>
-	<link rel="stylesheet" href="node_modules/semantic-ui-css/semantic.css">
+	<link rel="stylesheet" href="semantic.min.css">
 	<link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -65,14 +65,13 @@
 		</div>
 		<div class="ui fluid action input">
 			<input type="text" id="input_result" placeholder="Votre titre apparaitra ici">
-			<button id="copy" data-copytarget="#input_result" class="ui teal right labeled icon button">
-				<i class="copy icon"></i>
+			<button id="copy" data-copytarget="#input_result" class="ui teal button">
 				Copier
 			</button>
 		</div>
 	</div>
-	<script src="node_modules/jquery/dist/jquery.js"></script>
-	<script src="node_modules/semantic-ui-css/semantic.js"></script>
+	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+	<script src="semantic.min.js"></script>
 	<script src="view.js"></script>
 </body>
 </html>

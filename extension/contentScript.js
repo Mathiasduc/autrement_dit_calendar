@@ -14,10 +14,20 @@ chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
 		console.log(response);
 	}
 });
+console.log(document.querySelector('#maincell'));
+var inputQuickCreation;
+var	inputModify;
+
 
 function displayTitle(toDisplay, sendResponse){
-	console.log("in displayTitle");
-	var inputQuickCreation = document.getElementsByClassName('gcal-textinput');
-	var inputModify = document.getElementsByClassName('');
-	console.log(input);
+/*	if(!inputQuickCreation){*/
+		console.log("on reasigne inputQuickCreation");
+		inputQuickCreation = document.querySelector('.gcal-textinput');
+	/*}*/
+/*	if(!inputModify){*/
+		console.log("on reasigne inputModify");
+		inputModify = document.querySelector('.ep-title input');
+/*	}*/
+	inputQuickCreation.value = toDisplay;
+	console.log(inputQuickCreation, inputModify);
 }
