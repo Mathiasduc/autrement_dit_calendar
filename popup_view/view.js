@@ -3,56 +3,59 @@ var app = {
 	formSelector: $(".ui.form"),
 	input_result: $("#input_result"),
 	input_form: $(".ui.form input"),
-/*	forbiden_words: ["PRO","PERSO","PERM","SENSIB","PPS","PPS_1","PPS_2","PPS_3",
-"Annulé moins de 48h", "Annulé plus de 48h","A facturer"], on verra ca plus tard */
 
-init: function(){
-	this.formSettings();
-	this.populateForm();
-	this.populateSelect();
-	this.checkboxes();
-	$(".dropdown").dropdown();
-	this.listeners();
-},
+	init: function(){
+		this.formSettings();
+		this.populateForm();
+		this.populateSelect();
+		this.checkboxes();
+		$(".dropdown").dropdown();
+		this.listeners();
+	},
 
-populateForm: function(){
-	var me = this;
-	chrome.storage.local.get(function(result){
-		me.formSelector.form('set values', result.savedValues);
-	});
-},
+	populateForm: function(){
+		var me = this;
+		chrome.storage.local.get(function(result){
+			if(result.savedValues){
+				me.formSelector.form('set values', result.savedValues);
+				me.displayResult();
+			}
+		});
+	},
 
-populateSelect: function(){
-	var select = document.getElementById('type');
-	select.options.length = 1;
-	chrome.storage.sync.get(function(result){
-		var typeLength = result.type.length;
-		for (var i = 0; i < typeLength; i++) {
-			var currentOption = result.type[i];
-			select.options[select.options.length] = new Option(currentOption, currentOption );
-		}
-	});
-},
+	populateSelect: function(){
+		var me = this;
+		var select = document.getElementById('type');
+		select.options.length = 1;
+		chrome.storage.sync.get(function(result){
+			if(result.type){
+				var typeLength = result.type.length;
+				for (var i = 0; i < typeLength; i++) {
+					var currentOption = result.type[i];
+					select.options[select.options.length] = new Option(currentOption, currentOption );
+				}	
+			}else{
+				me.firstInstall();
+			}
+		});
+	},
 
-listeners: function(){
-	var me = this;
-	me.formSelector.on("on change", me.displayResult.bind(me));
-	me.input_form.on("keyup", me.displayResult.bind(me));
-	document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
-	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-		console.log(request, sender);
-		if (request.greeting == "hello"){
-			sendResponse({farewell: "goodbye from view"});
-		}
-	});
-},
+	listeners: function(){
+		var me = this;
+		me.formSelector.on("on change", me.displayResult.bind(me));
+		me.input_form.on("keyup", me.displayResult.bind(me));
+		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
+		chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+			console.log(request, sender);
+		});
+	},
 
-formSettings:function(){
-	this.formSelector.form();
-	/*A FAIRE regles de "danger" pour les mots interdits*/
-},
+	formSettings:function(){
+		this.formSelector.form();
+		/*A FAIRE regles de "danger" pour les mots interdits*/
+	},
 
-form_values:function(){
+	form_values:function(){
 		/* A FAIRE tester si "danger" et display "danger"
 		var form_is_valid = this.formSelector.form('is valid'); */
 		var values = this.formSelector.form('get values');
@@ -139,18 +142,18 @@ form_values:function(){
 
 	animationFeedbackCopy:function(){
 		var button = $('.button');
-		var iconButton = $('.button i');
+		button.toggleClass('blue green');
 
-		function toggleClasses(){
-			button.toggleClass('teal green');
-			iconButton.toggleClass('copy save');
-		}
-		toggleClasses();
-		setTimeout(function() {
-			toggleClasses();
+		setTimeout(function(){ 
+			button.toggleClass('blue green');
 		}, 300);
-		/*A FAIRE ameliorer l animation (text apparait quelques secondes)*/
 	},
+
+	firstInstall: function(){
+		var listType = ["ACCUEIL", "AO", "ATELIER LSF", "CAFE DU SILENCE", "CIS", "COLL", "DIAG", "DYS", "ETUDE DE POSTE", "FORMATION LSF", "IC", "INITIATION LSF", "LSF", "PERM", "PERSO", "POINT", "PPS 1", "PPS 2", "PPS 3", "PPS 4", "PREPA", "PRO", "RDV", "REMISE A NIVEAU", "REMISE A NIVEAU FRANÇAIS", "REMISE A NIVEAU LSF", "REUNION", "SENSIB"];
+		chrome.storage.sync.set({"type": listType});
+		this.populateSelect();
+	}
 };
 $(document).ready(function(){
 	app.init();

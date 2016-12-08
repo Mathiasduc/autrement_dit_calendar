@@ -77,7 +77,7 @@ var app = {
 			/*on affiche un message pendant 3 sec puis on le supprime*/
 			timerAnimation = setTimeout(function() {
 				status.textContent = '';
-			}, 3000);
+			}, 4000);
 		}
 		clearTimeout(timerAnimation); /*on s'assure qu'il ny ais pas d'animation en cours*/
 		status.textContent = '';

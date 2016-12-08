@@ -1,5 +1,0 @@
-avec semantic full : 2730ms
-sans rien: 950ms
-semantic(form) js et css compresse: 2500ms
-avec jquery.min : 1950ms
-avec jquery.slim.min : 1900ms
