@@ -45,6 +45,11 @@ var app = {
 		me.formSelector.on("on change", me.displayResult.bind(me));
 		me.input_form.on("keyup", me.displayResult.bind(me));
 		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
+		document.getElementById('to_options').addEventListener("click",function(){
+			chrome.runtime.openOptionsPage();
+		},true);
+
+		/*a delete pour prod*/
 		chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			console.log(request, sender);
 		});

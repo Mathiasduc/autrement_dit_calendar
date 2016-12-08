@@ -16,6 +16,14 @@ body{
 	min-width: 47em;
 }
 
+a{
+	cursor: pointer;
+}
+
+a:active{
+	background-color: grey;
+}
+
 #form_title{
 	display: flex;
 	justify-content: space-between;

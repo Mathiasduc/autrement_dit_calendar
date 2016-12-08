@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Autrement dit calendar",
-  "version": "0.8",
+  "version": "0.9",
 
   "description": "Une extension pour aider a l'uniformisation des titres d'evenements Google calendar",
   "icons": {
