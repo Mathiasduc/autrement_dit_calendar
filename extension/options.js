@@ -21,7 +21,7 @@ var app = {
 			chrome.storage.sync.get(function(result){
 				options = result.type;
 				populate();
-				/*object global chrome auquel on a acces a .storage grace a la permission dans le manifest .sync pour stockage synchronisé (voir doc)*/
+				/*object global chrome depuis lequel on a acces a .storage grace a la permission dans le manifest .sync pour stockage synchronisé (voir doc)*/
 			});
 		}else{
 			populate();

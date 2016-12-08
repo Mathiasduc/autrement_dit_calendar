@@ -4,61 +4,55 @@ var app = {
 	input_result: $("#input_result"),
 	input_form: $(".ui.form input"),
 /*	forbiden_words: ["PRO","PERSO","PERM","SENSIB","PPS","PPS_1","PPS_2","PPS_3",
-	"Annulé moins de 48h", "Annulé plus de 48h","A facturer"], on verra ca plus tard */
+"Annulé moins de 48h", "Annulé plus de 48h","A facturer"], on verra ca plus tard */
 
-	init: function(){
-		this.formSettings();
-		this.populateForm();
-		this.populateSelect();
-		this.checkboxes();
-		$(".dropdown").dropdown();
-		this.listeners();
-	},
+init: function(){
+	this.formSettings();
+	this.populateForm();
+	this.populateSelect();
+	this.checkboxes();
+	$(".dropdown").dropdown();
+	this.listeners();
+},
 
-	populateForm: function(){
-		var me = this;
-		chrome.storage.local.get(function(result){
-			console.log(result);
-			me.formSelector.form('set values', result.savedValues);
-		});
-	},
+populateForm: function(){
+	var me = this;
+	chrome.storage.local.get(function(result){
+		me.formSelector.form('set values', result.savedValues);
+	});
+},
 
-	populateSelect: function(){
-		var select = document.getElementById('type');
-		select.options.length = 1;
-			chrome.storage.sync.get(function(result){
-			var typeLength = result.type.length;
-			for (var i = 0; i < typeLength; i++) {
-				var currentOption = result.type[i];
-				select.options[select.options.length] = new Option(currentOption, currentOption );
-			}	
-		});
-	},
-	
-	listeners: function(){
-		var me = this;
-		me.formSelector.on("on change", me.displayResult.bind(me));
-		me.input_form.on("keyup", me.displayResult.bind(me));
-		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
-		chrome.runtime.sendMessage({test: "message?"});
-		addEventListener("onunload", function() {
-			console.log("onunload");
-			chrome.runtime.sendMessage({'onunload': "onunload"});
-		}, true);
-		addEventListener("unload", function() {
-			var savedValues = me.form_values();
-			console.log("unloading");
-			chrome.runtime.sendMessage({'savedValues': savedValues});
-			chrome.storage.local.set({'savedValues': savedValues})
-		}, true);
-	},
+populateSelect: function(){
+	var select = document.getElementById('type');
+	select.options.length = 1;
+	chrome.storage.sync.get(function(result){
+		var typeLength = result.type.length;
+		for (var i = 0; i < typeLength; i++) {
+			var currentOption = result.type[i];
+			select.options[select.options.length] = new Option(currentOption, currentOption );
+		}
+	});
+},
 
-	formSettings:function(){
-		this.formSelector.form();
-		/*A FAIRE regles de "danger" pour les mots interdits*/
-	},
+listeners: function(){
+	var me = this;
+	me.formSelector.on("on change", me.displayResult.bind(me));
+	me.input_form.on("keyup", me.displayResult.bind(me));
+	document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
+	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+		console.log(request, sender);
+		if (request.greeting == "hello"){
+			sendResponse({farewell: "goodbye from view"});
+		}
+	});
+},
 
-	form_values:function(){
+formSettings:function(){
+	this.formSelector.form();
+	/*A FAIRE regles de "danger" pour les mots interdits*/
+},
+
+form_values:function(){
 		/* A FAIRE tester si "danger" et display "danger"
 		var form_is_valid = this.formSelector.form('is valid'); */
 		var values = this.formSelector.form('get values');
@@ -67,38 +61,39 @@ var app = {
 
 	outputFormatting: function(){
 		var values = this.form_values();
-		chrome.storage.local.set({'savedValues': values})
 		var stringOutput = "";
-		if(!values){
-			return(values);
+
+		if(values.type){
+			stringOutput += values.type + " ";
 		}
-		else{
-			if(values.type){
-				stringOutput += "[T:"+ values.type + "]";
-			}
-			if(values.name){
-				stringOutput += " " + values.name;
-			}
-			if(values.estimate_number){
-				stringOutput += " [D:" + values.estimate_number + "]";
-			}
-			if(values.bill_number){
-				stringOutput += " [F:" + values.bill_number + "]";
-			}
-			if(values.canceled_after_48h){
-				stringOutput += " [A:" + "Annulé -48h" + "]";
-			}
-			if(values.canceled_before_48h){
-				stringOutput += " [A:" + "Annulé +48h" + "]";
-			}
-			if(values.to_bill){
-				stringOutput += " [F:" + "A facturer" + "]";
-			}
-			if(values.input_other){
-				stringOutput += " [I:" + values.input_other + "]";
-			}	
-			return(stringOutput);
+		if(values.name){
+			stringOutput +=  values.name + " ";
 		}
+		if(values.estimate_number){
+			stringOutput += values.estimate_number + " ";
+		}
+		if(values.bill_number){
+			stringOutput += values.bill_number + " ";
+		}
+		if(values.canceled_after_48h){
+			stringOutput += "Annulé -48h" + " ";
+		}
+		if(values.canceled_before_48h){
+			stringOutput += "Annulé +48h" + " ";
+		}
+		if(values.to_bill){
+			stringOutput += "A facturer" + " ";
+		}
+		if(values.input_other){
+			stringOutput += values.input_other;
+		}	
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, {"toDisplay": stringOutput}, function(response) {
+				console.log(response);
+			});
+		});
+		chrome.storage.local.set({'savedValues': values});
+		return(stringOutput);
 	},
 	
 	displayResult:function(){

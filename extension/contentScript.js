@@ -1,21 +1,23 @@
-var app = {
-	init: function(){
-		/*test d envoi et de reception de message entre popup et view */
-		chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-			console.log(sender.tab ?
-				"from a content script:" + sender.tab.url :
-				"from the extension");
-			if (request.greeting == "hello"){
-				sendResponse({farewell: "goodbye from content"});
-			}
-		});
-
-		chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-			console.log(response.farewell);
-		});
-
-	},
-}
+'use strict';
 console.log("dans contentscript");
+/*test d envoi et de reception de message entre popup et view */
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	if(request.toDisplay){
+		displayTitle(request.toDisplay, sendResponse);
+	}
+	console.log(request);
+	sendResponse({state:'received'});
+});
 
-app.init();
+chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
+	if(response){
+		console.log(response);
+	}
+});
+
+function displayTitle(toDisplay, sendResponse){
+	console.log("in displayTitle");
+	var inputQuickCreation = document.getElementsByClassName('gcal-textinput');
+	var inputModify = document.getElementsByClassName('');
+	console.log(input);
+}
