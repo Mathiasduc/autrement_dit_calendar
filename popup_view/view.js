@@ -6,8 +6,8 @@ var app = {
 
 	init: function(){
 		this.formSettings();
-		this.populateForm();
 		this.populateSelect();
+		this.populateForm();
 		this.checkboxes();
 		$(".dropdown").dropdown();
 		this.listeners();
@@ -17,10 +17,26 @@ var app = {
 		var me = this;
 		chrome.storage.local.get(function(result){
 			if(result.savedValues){
-				me.formSelector.form('set values', result.savedValues);
+				console.log(result.savedValues);
+				var transformedValues = me.transformOnStateToTrue(result.savedValues);
+				console.log(transformedValues);
+				me.formSelector.form('set values', transformedValues);
 				me.displayResult();
 			}
 		});
+	},
+
+	transformOnStateToTrue: function(savedValues){
+		if(savedValues.canceled_after_48h){
+			savedValues.canceled_after_48h = true;	
+		}
+		if(savedValues.canceled_before_48h){
+			savedValues.canceled_before_48h = true;	
+		}
+		if(savedValues.to_bill){
+			savedValues.to_bill = true;	
+		}
+		return(savedValues);
 	},
 
 	populateSelect: function(){
@@ -57,12 +73,9 @@ var app = {
 
 	formSettings:function(){
 		this.formSelector.form();
-		/*A FAIRE regles de "danger" pour les mots interdits*/
 	},
 
 	form_values:function(){
-		/* A FAIRE tester si "danger" et display "danger"
-		var form_is_valid = this.formSelector.form('is valid'); */
 		var values = this.formSelector.form('get values');
 		return(values)
 	},
