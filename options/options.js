@@ -45,7 +45,8 @@ var app = {
 		}
 		newType = newType.trim().replace(/ /g,"_");	/*on enleve les espaces de debut et de fin(trim) et on remplace les espaces restants avec des underscores (REGEX)*/
 		chrome.storage.sync.get(function(result){
-			result.type.push(newType).sort();
+			result.type.push(newType);
+			result.type = result.type.sort(); 
 			chrome.storage.sync.set({type: result.type}, function() {
 				me.animationFeedback("add");
 				me.populateSelect(result.type);
