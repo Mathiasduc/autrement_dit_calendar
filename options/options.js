@@ -37,7 +37,8 @@ var app = {
 	saveNewOptions: function(event){
 		event.preventDefault();
 		var me = this;
-		var newType = document.getElementById('type_add').value;
+		var input_add = document.getElementById('type_add');
+		var newType = input_add.value;
 		if(!newType){ 
 			/*verfie que la valeur n'est pas nulle*/
 			me.animationFeedback('empty');
@@ -52,6 +53,7 @@ var app = {
 				me.populateSelect(result.type);
 			});
 		});
+		input_add.value = "";
 	},
 
 	deleteOptions:function(event){
