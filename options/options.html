@@ -6,9 +6,10 @@
 	<link rel="stylesheet" href="options.css">
 </head>
 <body>
+	<div class="info">Vous pouvez ici, supprimer des codes du menu déroulant en les sélectionnant dans le menu déroulant puis en cliquant sur "supprimer un code".</div>
 	<form class="first_form">
 			<label for="type">	
-				Type d'intervention:
+				Choisissez un code du menu deroulant a supprimer:
 			</label>
 		<div>
 			<select name="type" id="type">
@@ -17,11 +18,13 @@
 			<button id="delete_option">Supprimer ce type</button>
 		</div>
 	</form>
+	<hr>
+	<div class="info">Ici vous pouvez ajouter un code au menu déroulant de l'extension en l'entrant plus bas et en validant sur "Ajouter".</div>
 	<form>
 		<label for="type_add">Ajouter un nouveau type:</label>
 		<div>
 			<input id="type_add" type="text">
-			<button id="button_add">Ajouter</button>	
+			<button id="button_add">Ajouter code</button>	
 		</div>
 		<div id="status"></div>
 	</form>

@@ -4,6 +4,11 @@ body{
 	min-width: 30em; 
 }
 
+.info{
+	font-size: 14px;
+	margin-bottom: 0.5em; 
+}
+
 .first_form{
 	margin-bottom: 2.5em;
 }
