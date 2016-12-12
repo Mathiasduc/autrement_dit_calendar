@@ -55,11 +55,12 @@ var app = {
 			}
 		});
 	},
-
+	
 	listeners: function(){
 		var me = this;
 		me.formSelector.on("on change", me.displayResult.bind(me));
 		me.input_form.on("keyup", me.displayResult.bind(me));
+		$(".clear").on("click", function(){me.input_result.val("")});
 		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
 		document.getElementById('to_options').addEventListener("click",function(){
 			chrome.runtime.openOptionsPage();
