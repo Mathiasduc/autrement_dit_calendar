@@ -8,20 +8,18 @@ var app = {
 
 	populateSelect: function(options){
 		var me = this;
-		me.select.options.length = 1; /* on reinitialise le nombre d'option du select a 1(default option)*/
+		me.select.options.length = 1;
 		function populate(){
 			var optionsLength = options.length;
 			for (var i = 0; i < optionsLength; i++) {
 				var currentOption = options[i];
-				me.select.options[me.select.options.length] = new Option(currentOption, currentOption); /*on affecte tout les valeur recuperee en memoire a des nouvelles options pour le select*/
+				me.select.options[me.select.options.length] = new Option(currentOption, currentOption);
 			}	
 		}
 		if(!options){
-			console.log("populate options undefined")
 			chrome.storage.sync.get(function(result){
 				options = result.type;
 				populate();
-				/*object global chrome depuis lequel on a acces a .storage grace a la permission dans le manifest .sync pour stockage synchronisé (voir doc)*/
 			});
 		}else{
 			populate();
@@ -40,11 +38,10 @@ var app = {
 		var input_add = document.getElementById('type_add');
 		var newType = input_add.value;
 		if(!newType){ 
-			/*verfie que la valeur n'est pas nulle*/
 			me.animationFeedback('empty');
 			return(1);
 		}
-		newType = newType.trim().replace(/ /g,"_");	/*on enleve les espaces de debut et de fin(trim) et on remplace les espaces restants avec des underscores (REGEX)*/
+		newType = newType.trim().replace(/ /g,"_");
 		chrome.storage.sync.get(function(result){
 			result.type.push(newType);
 			result.type = result.type.sort(); 
@@ -59,8 +56,7 @@ var app = {
 	deleteOptions:function(event){
 		event.preventDefault();
 		var me = this;
-		var valueToDelete = me.select.options[me.select.selectedIndex].value; /*on recup la valeur de l'element selectionne dans le select*/
-		console.log(valueToDelete);
+		var valueToDelete = me.select.options[me.select.selectedIndex].value;
 		chrome.storage.sync.get(function(result){
 			var indexToDelete = result.type.indexOf(valueToDelete);
 			result.type.splice(indexToDelete, 1);
@@ -71,22 +67,20 @@ var app = {
 		});
 	},
 
-	animationFeedback: function(typeOfMessage){ 
-		/*fonction pour graphiquement valider l'action de l'user*/
+	animationFeedback: function(typeOfMessage){
 		var status = document.getElementById('status');
 		var timerAnimation;
 		function messageTimer(message){
 			status.textContent = message;
-			/*on affiche un message pendant 3 sec puis on le supprime*/
+			
 			timerAnimation = setTimeout(function() {
 				status.textContent = '';
 			}, 4000);
 		}
-		clearTimeout(timerAnimation); /*on s'assure qu'il ny ais pas d'animation en cours*/
+		clearTimeout(timerAnimation); 
 		status.textContent = '';
 
 		if (typeOfMessage === "add"){
-			/* on teste l'argument passé afin de savoir quelle action ete faite*/
 			messageTimer('Nouveau type sauvegardé.');
 		}else if (typeOfMessage === "empty"){
 			messageTimer("Veuillez entrer une valeur.");	

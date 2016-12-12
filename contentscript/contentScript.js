@@ -3,7 +3,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if(request.toDisplay){
 		displayTitle(request.toDisplay, sendResponse);
 	}
-	sendResponse({state:'received'});
 });
 
 function displayTitle(toDisplay, sendResponse){

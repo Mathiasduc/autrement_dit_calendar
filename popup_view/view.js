@@ -17,9 +17,7 @@ var app = {
 		var me = this;
 		chrome.storage.local.get(function(result){
 			if(result.savedValues){
-				console.log(result.savedValues);
 				var transformedValues = me.transformOnStateToTrue(result.savedValues);
-				console.log(transformedValues);
 				me.formSelector.form('set values', transformedValues);
 				me.displayResult();
 			}
@@ -64,11 +62,6 @@ var app = {
 		document.getElementById('to_options').addEventListener("click",function(){
 			chrome.runtime.openOptionsPage();
 		},true);
-
-		/*a delete pour prod*/
-		chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-			console.log(request, sender);
-		});
 	},
 
 	formSettings:function(){
@@ -109,53 +102,36 @@ var app = {
 			stringOutput += values.input_other;
 		}	
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			chrome.tabs.sendMessage(tabs[0].id, {"toDisplay": stringOutput}, function(response) {
-				console.log(response);
-			});
+			chrome.tabs.sendMessage(tabs[0].id, {"toDisplay": stringOutput});
 		});
 		chrome.storage.local.set({'savedValues': values});
 		return(stringOutput);
 	},
 	
 	displayResult:function(){
-		this.input_result.val("test");
 		var result = this.outputFormatting();
 		this.input_result.val(result);
 	},
 
 	copyToClipboard: function(event){
-		var idOfElementToCopy = event.target.dataset.copytarget;	  /*recupere l'id(de l'elem qu'on veut cibler) stocké dans le data-copytarget*/
-		var elementToCopy = document.querySelector(idOfElementToCopy);/*cible l'element dont on viens de recup l'Id*/
-		elementToCopy.select(); 			/*selectionne le contenu de l'input*/ 
-		try {								/*on delimite une zone a tester*/
-			document.execCommand('copy'); 	/*copie la selection dans le clipboard*/
-			elementToCopy.blur(); 			/*fait perde le focus sur l input(et donc deselectionne)*/
-			this.animationFeedbackCopy();	/*animation qu il faudrait faire*/
+		var idOfElementToCopy = event.target.dataset.copytarget;	
+		var elementToCopy = document.querySelector(idOfElementToCopy);
+		elementToCopy.select(); 			
+		try {								
+			document.execCommand('copy'); 	
+			elementToCopy.blur(); 			
+			this.animationFeedbackCopy();	
 		}
 		catch (err) {
-			console.log('Erreur: ',err); 	/*si erreur, on la console log*/
+			console.log('Erreur: ',err); 	
 		}
 	},
 
 	checkboxes:function(){
 		$('.checkbox').checkbox();
-
-		/*Ces deux fonctions permetent de s'assurer que une seul checkbox peut etre check.
-		Ces deux fonctions tiennent compte du niveau d'absatraction que semantic implemente.
-		On remarque que on cible la div de la checkbox et pas la checkbox elle meme.
-		Ces deux fonctions sont, si j'ai bien compris, des raccourcis pour creer des listeners(event handlers).*/
-
 		$('#canceled_after_48h').checkbox('attach events', '#canceled_before_48h', 'uncheck');
 		$('#canceled_before_48h').checkbox('attach events', '#canceled_after_48h', 'uncheck');
 
-		/*L'on pourrais aussi utiliser cette fonction(en double) pour remplacer les fonction lignes 113 et 114
-	
-		var canceled_after_48h = $('#canceled_after_48h');
-		 canceled_after_48h.on('change',function(){
-			if(canceled_before_48h.checkbox('is checked')){
-				canceled_before_48h.checkbox('uncheck')
-			}
-		});*/
 	},
 
 	animationFeedbackCopy:function(){
