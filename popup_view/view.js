@@ -3,13 +3,14 @@ var app = {
 	formSelector: $(".ui.form"),
 	input_result: $("#input_result"),
 	input_form: $(".ui.form input"),
+	dropdown: $(".dropdown"),
 
 	init: function(){
 		this.formSettings();
 		this.populateSelect();
 		this.populateForm();
 		this.checkboxes();
-		$(".dropdown").dropdown();
+		this.dropdown.dropdown();
 		this.listeners();
 	},
 
@@ -25,6 +26,7 @@ var app = {
 	},
 
 	transformOnStateToTrue: function(savedValues){
+		console.log(savedValues, this);
 		if(savedValues.canceled_after_48h){
 			savedValues.canceled_after_48h = true;	
 		}
@@ -34,6 +36,7 @@ var app = {
 		if(savedValues.to_bill){
 			savedValues.to_bill = true;	
 		}
+		this.dropdown.dropdown("set selected",savedValues.type)
 		return(savedValues);
 	},
 
@@ -58,6 +61,7 @@ var app = {
 		var me = this;
 		me.formSelector.on("on change", me.displayResult.bind(me));
 		me.input_form.on("keyup", me.displayResult.bind(me));
+		$(".clear").on("click", function(){setTimeout(function(){me.input_result.val("");}, 50);});
 		document.getElementById('copy').addEventListener("click",me.copyToClipboard.bind(me),true);
 		document.getElementById('to_options').addEventListener("click",function(){
 			chrome.runtime.openOptionsPage();
