@@ -4,3 +4,4 @@ a chrome extension for google calendar
 
 ## Comment utiliser / How to use :
 [Guide](https://docs.google.com/presentation/d/1hnuD5ZT2IezLtuAbo1zUbYt2CLuaNf-YmrzAGP8Vxv8/edit?usp=sharing) 
+Store link : https://chrome.google.com/webstore/detail/autrement-dit-calendar/ilcphdoccbokfljchnelabbdmakknlal/
